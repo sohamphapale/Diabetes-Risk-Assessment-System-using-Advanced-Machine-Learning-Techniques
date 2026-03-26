@@ -18,14 +18,6 @@ def main():
     model_dir = Path("models")
     model_dir.mkdir(exist_ok=True)
 
-    FEATURES = ['invoice_quantity',
-                'invoice_dollars',
-                "Freight",
-                'total_item_quantity',
-                'total_item_dollars',
-                ]
-
-    TARGET = "flag_invoice"
     df = load_diabetes_health_data("./data/diabetes-data.csv")
     df = remove_redundant_columns(df)
     df = replace_na_values(df)
@@ -44,9 +36,9 @@ def main():
         'RandomForestClassifier'
     )
 
-    model_path = model_dir / "predict_flag_invoice.pkl"
+    model_path = model_dir / "predict_diabetes.joblib"
     joblib.dump(grid_search.best_estimator_, model_path)
-    
+
 
 if __name__ == "__main__":
     main()

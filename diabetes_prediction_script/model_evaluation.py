@@ -2,6 +2,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, f1_score, classification_report, make_scorer
+from sklearn.model_selection import RandomizedSearchCV
 # write a function to train the model
 
 
@@ -11,24 +12,28 @@ def train_random_forest(X_train, y_train):
         n_jobs=-1
     )
 
-    param_grid = {
-        "n_estimators": [100, 200, 300],
-        "max_depth": [None, 4, 5, 6],
-        "min_samples_split": [2, 3, 5],
-        "min_samples_leaf": [1, 2, 5],
-        "criterion": ['gini', 'entropy']
+    rf.fit(X_train, y_train)
+
+    param_dist = {
+        'n_estimators': [100, 200, 300, 500],
+        'max_depth': [None, 5, 10, 20, 30],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'max_features': ['sqrt', 'log2']
     }
-    scorer = make_scorer(f1_score)
-    grid_search = GridSearchCV(
+
+    random_search = RandomizedSearchCV(
         estimator=rf,
-        param_grid=param_grid,
-        scoring=scorer,
-        cv=5,
-        verbose=2,
+        param_distributions=param_dist,
+        n_iter=20,              # number of combinations to try
+        cv=5,                   # 5-fold cross-validation
+        verbose=1,
+        random_state=42,
         n_jobs=-1
     )
-    grid_search.fit(X_train, y_train)
-    return grid_search
+
+    random_search.fit(X_train, y_train)
+    return random_search
 
 
 # write a function to get error or best fit model at return

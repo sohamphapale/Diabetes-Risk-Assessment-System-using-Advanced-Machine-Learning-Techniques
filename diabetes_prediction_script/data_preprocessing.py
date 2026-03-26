@@ -22,7 +22,8 @@ def replace_na_values(df: pd.DataFrame):
     # 1.  mean() -> Normal distribution
     # 2.  median() for -> Skewed / Outliers present
     df['Glucose'] = df['Glucose'].fillna(df['Glucose'].mean())
-    df['BloodPressure'] = df['BloodPressure'].fillna(df['BloodPressure'].mean())
+    df['BloodPressure'] = df['BloodPressure'].fillna(
+        df['BloodPressure'].mean())
     df['Insulin'] = df['Insulin'].fillna(df['Insulin'].median())
     df['BMI'] = df['BMI'].fillna(df['BMI'].median())
     return df
@@ -73,7 +74,8 @@ def transform_numerical_to_categorical(df: pd.DataFrame):
 def encode_categorical_features(df: pd.DataFrame):
     cat_cols = ['Glucose', 'BloodPressure', 'Insulin', 'BMI',
                 'DiabetesPedigreeFunction', 'Age']
-    return pd.get_dummies(df, columns=cat_cols)
+
+    return pd.get_dummies(df, columns=cat_cols).astype(int)
 
 
 # prepare features
